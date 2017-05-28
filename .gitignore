@@ -27,3 +27,6 @@ ObjectWrapperCallTrace.txt
 # Intellij specific
 *.idea
 *.iml
+
+# Target classes
+target/
