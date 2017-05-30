@@ -27,5 +27,6 @@ public class MethodDefinitionLogFile {
 
     public static void setFileName(String newFileName) {
         fileName = newFileName;
+        file = new File(Thread.currentThread().getContextClassLoader().getResource(fileName).getFile());
     }
 }

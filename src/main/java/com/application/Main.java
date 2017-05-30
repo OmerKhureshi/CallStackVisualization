@@ -29,21 +29,15 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-// DoneToDo: Figure out reloading.
-// ToDo: Change time stamp to milliseconds.
-// ToDo: get logs from a real app
-// ToDo: UI - thread info in left pane. show single thread on canvas
-// ToDo: UI - label for each node for classname.methodname.
 
 public class Main extends Application {
-    // Part of code from http://stackoverflow.com/a/30696075/3690248
     Graph graph;
     Model model;
     BorderPane root;
     Scene scene;
     public Stage primaryStage;
     Label statusBarLabel = new Label();
-    final static ListView<String> threadListView = new ListView<>();
+    static ListView<String> threadListView;
     ObservableList<String> threadsObsList;
 
     ConvertDBtoElementTree convertDBtoElementTree;
@@ -77,23 +71,27 @@ public class Main extends Application {
 
         demoOne.setOnAction(event -> {
             DatabaseUtil.resetDB();
-            // CallTraceLogFile.setFileName("L-Instrumentation_call_trace_Demo_2.txt");
-            // MethodDefinitionLogFile.setFileName("L-Instrumentation_method_definitions_Demo_2.txt");
-            // reload();
+
+            CallTraceLogFile.setFileName("logs/L-Instrumentation_call_trace_Demo_1.txt");
+            MethodDefinitionLogFile.setFileName("logs/L-Instrumentation_method_definitions_Demo_1.txt");
+            reload();
         });
 
         demoTwo.setOnAction(event -> {
-            CallTraceLogFile.setFileName("L-Instrumentation_call_trace_Demo_3.txt");
-            MethodDefinitionLogFile.setFileName("L-Instrumentation_method_definitions_Demo_3.txt");
+            DatabaseUtil.resetDB();
+
+            CallTraceLogFile.setFileName("logs/L-Instrumentation_call_trace_Demo_2.txt");
+            MethodDefinitionLogFile.setFileName("logs/L-Instrumentation_method_definitions_Demo_2.txt");
             reload();
         });
 
         demoThree.setOnAction(event -> {
-            CallTraceLogFile.setFileName("L-Instrumentation_call_trace_Demo_1.txt");
-            MethodDefinitionLogFile.setFileName("L-Instrumentation_method_definitions_Demo_1.txt");
+            DatabaseUtil.resetDB();
+
+            CallTraceLogFile.setFileName("logs/L-Instrumentation_call_trace_Demo_3.txt");
+            MethodDefinitionLogFile.setFileName("logs/L-Instrumentation_method_definitions_Demo_3.txt");
             reload();
         });
-
 
         root.setTop(mb);
 
@@ -102,9 +100,7 @@ public class Main extends Application {
         statusBar.getChildren().add(statusBarLabel);
         root.setBottom(statusBar);
         scene = new Scene(root, 1000, 300);
-        System.out.println(">>>> getClass: " + getClass());
         URL url = getClass().getClassLoader().getResource("css/application.css");
-        System.out.println(">>>>> url: " + url);
         String css = url.toExternalForm();
         scene.getStylesheets().add(css);
         // scene.getStylesheets().add(getClass().getResource("css/application.css").toExternalForm());
@@ -124,6 +120,7 @@ public class Main extends Application {
         // Layout Left
         // threadListView = new ListView<>();
         threadsObsList = FXCollections.observableArrayList();
+        threadListView = new ListView<>();
         threadListView.setItems(threadsObsList);
         root.setLeft(threadListView);
 
